@@ -1,0 +1,258 @@
+
+    
+/*# sourceURL=truebooker-front-style-inline-css */
+    </style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" id="truebooker-google-font-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1.6" id="contact-form-7-css" media="all" rel="stylesheet"/>
+<link href="//brivona-demo.themetechmount.com/elementor-demo6/wp-content/plugins/revslider/public/css/sr7.css?ver=6.7.41" id="sr7css-css" media="all" rel="stylesheet"/>
+<link href="assets/css/acc27b51_font-awesome.min.css" id="fontawesome-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/assets/perfect-scrollbar/perfect-scrollbar.min.css?ver=7.1" id="perfect-scrollbar-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/assets/chrisbracco-tooltip/chrisbracco-tooltip.min.css?ver=7.1" id="chrisbracco-tooltip-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/css/multi-columns-row.css?ver=7.1" id="multi-columns-row-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/assets/select2/select2.min.css?ver=7.1" id="tm-select2-css" media="all" rel="stylesheet"/>
+<link href="assets/css/c31fc10e_flexslider.css" id="flexslider-css" media="all" rel="stylesheet"/>
+<link href="assets/css/d7032965_tm-brivona-icons.css" id="tm-brivona-icons-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/assets/slick/slick.css?ver=7.1" id="slick-css" media="all" rel="stylesheet"/>
+<link href="assets/css/5655edd6_slick-theme.css" id="slick-theme-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/assets/prettyphoto/css/prettyPhoto.css?ver=7.1" id="prettyphoto-css" media="all" rel="stylesheet"/>
+<link href="assets/css/d01aeb6e_bootstrap.min.css" id="bootstrap-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/css/bootstrap-theme.min.css?ver=7.1" id="bootstrap-theme-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/plugins/js_composer/assets/css/js_composer_tta.min.css?ver=7.1" id="vc_tta_style-css" media="all" rel="stylesheet"/>
+<link href="assets/css/c332e356_themify-icons.css" id="themify-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/css/base.css?ver=7.1" id="brivona-base-style-css" media="all" rel="stylesheet"/>
+<link href="https://brivona-demo.themetechmount.com/elementor-demo6/wp-content/themes/brivona/css/main.css?ver=7.1" id="brivona-main-style-css" media="all" rel="stylesheet"/>
+<style id="brivona-main-style-inline-css">
+      /*------------------------------------------------------------------
+* dynamic-style.php index *
+[Table of contents]
+
+1.  Background color
+2.  Topbar Background color
+3.  Element Border color
+4.  Textcolor
+5.  Boxshadow
+6.  Header / Footer background color
+7.  Footer background color
+8.  Logo Color
+9.  Genral Elements
+10. "Center Logo Between Menu" options
+11. Floating Bar
+-------------------------------------------------------------------*/
+
+
+:root {
+  --tm-skincolor-color:#e43089;
+ --body-fonts-family:Space Mono;
+  --tm-skincolor-bg:#e43089;
+  --tm-secondary-bg:#913985;
+  --tm-greycolor-bg:#ece8e0;
+  --tm-skincolor-text:#e43089;
+  --tm-secondary-text:#913985;
+  --body-fonts-color:#6f6f6f;
+  --body-font-size:15px;
+  --body-blackfont-color:#232323;
+  --tm-first-gradientcolor:#59aa46;
+  --tm-second-gradientcolor:#e43089;   
+  --special-element-fontfamily:DM Sans;
+  --button-font-weight: 700;
+  --button-font-transform: ;
+}
+
+ .tm-titlebar h1.entry-title, .tm-titlebar-textcolor-custom .tm-titlebar-main .entry-title{font-family:"DM Sans", Arial, Helvetica, sans-serif;font-weight:400;font-size:47px;line-height:57px;color:#913985;}
+
+
+
+/**
+* Responsive Menu
+* ----------------------------------------------------------------------------
+*/
+@media (max-width: 1200px){
+	/* Responsive Header bg color */
+		.tm-header-overlay #site-header.site-header.tm-bgcolor-custom{
+		background-color: #913985 !important;
+	}
+    
+    #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars,
+    .tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1 {
+        display: inline-block;
+		width: 30px;
+        height: 2px;
+        background: #913985;
+        border-radius: 3px;
+        transition: 0.3s;
+        position: relative;
+    }
+    
+    #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars:before, 
+    #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars:after,
+    
+    .tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:before, 
+    .tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:after {
+        display: inline-block;
+		width: 30px;
+		height: 2px;
+        background: #913985;
+        border-radius: 3px;
+        transition: 0.3s;
+        position: absolute;
+        left: 0;
+        content: '';
+        -webkit-transform-origin: 0.28571rem center;
+        transform-origin: 0.28571rem center;
+        margin: 0;
+    }
+      
+
+
+    /* Dark color */  
+    .site-header.tm-bgcolor-white #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars,
+    .site-header.tm-bgcolor-white #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars:before,
+    .site-header.tm-bgcolor-white #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars:after,     
+      
+    .site-header.tm-bgcolor-grey.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1,
+    .site-header.tm-bgcolor-grey.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:before, 
+    .site-header.tm-bgcolor-grey.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:after,         
+      
+    .tm-bgcolor-white.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1,
+    .tm-bgcolor-white.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:before, 
+    .tm-bgcolor-white.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:after,        
+    
+	.tm-responsive-icon-dark.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1,
+    .tm-responsive-icon-dark.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:before, 
+    .tm-responsive-icon-dark.tm-mmmenu-override-yes #site-header-menu #site-navigation .mega-menu-wrap .mega-menu-toggle .mega-toggle-block-1:after,
+
+    .tm-responsive-icon-dark #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars,
+    .tm-responsive-icon-dark #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars:before, 
+    .tm-responsive-icon-dark #site-header-menu #site-navigation .menu-toggle .tm-brivona-icon-bars:after{
+         background-color: #913985;
+    }
+      
+    
+    .site-header.tm-bgcolor-grey .menu-toggle i, 
+    .site-header.tm-bgcolor-grey .tm-header-icons a,  
+    .site-header.tm-bgcolor-white .menu-toggle i, 
+    .tm-responsive-icon-dark .menu-toggle i, 
+    .tm-responsive-icon-dark .tm-header-icons a {
+    	color: #913985;
+    }
+
+	
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.nav-menu > ul > li.current-menu-item > a:after,
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.nav-menu > ul > li.current-menu-ancestor > a:after,
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.nav-menu > ul > li.current_page_item > a:after,
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.nav-menu > ul > li.current_page_ancestor > a:after,
+	.tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .tm-stickable-header.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.mega-menu-wrap ul.mega-menu.mega-menu-horizontal > li.mega-menu-item.mega-current-menu-ancestor > a:after, 
+	.tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .tm-stickable-header.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.mega-menu-wrap ul.mega-menu.mega-menu-horizontal > li.mega-menu-item.mega-current-menu-item > a:after,
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.nav-menu > ul > li.current-menu-item > a:after,
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.nav-menu > ul > li.current-menu-ancestor > a:after,
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.nav-menu > ul > li.current_page_item > a:after,
+	.tm-header-style-infostack #site-header-menu .tm-stickable-header:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.nav-menu > ul > li.current_page_ancestor > a:after,
+	.tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .tm-stickable-header:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.mega-menu-wrap ul.mega-menu.mega-menu-horizontal > li.mega-menu-item.mega-current-menu-ancestor > a:after,	
+	.tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .tm-stickable-header:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.mega-menu-wrap ul.mega-menu.mega-menu-horizontal > li.mega-menu-item.mega-current-menu-item > a:after {
+		background-color: #913985;
+	}
+
+	.tm-header-style-infostack .tm-header-menu-bg-color-skincolor .kw-phone .ttm-custombutton {
+		background-color:#913985;
+		padding: 0 15px;
+	}
+ 
+	
+	.tm-header-style-infostack #site-header-menu .site-header-menu-inner:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation  div.nav-menu > ul > li:hover > a:after,
+	 tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .site-header-menu-inner:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.mega-menu-wrap ul.mega-menu.mega-menu-horizontal > li.mega-menu-item:hover > a:after,
+	 .tm-header-style-infostack #site-header-menu .site-header-menu-inner.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.nav-menu > ul > li:hover > a:after,
+	 tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .site-header-menu-inner.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.mega-menu-wrap ul.mega-menu.mega-menu-horizontal > li.mega-menu-item:hover > a:after, 
+	.tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .site-header-menu-inner:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation div.mega-menu-wrap ul.mega-menu.mega-menu-horizontal > li.mega-menu-item > a:after,	
+	tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .site-header-menu-inner:not(.is_stuck) .tm-header-menu-bg-color-skincolor #site-navigation iv.nav-menu > ul > li > a:after,		
+	.tm-header-style-infostack #site-header-menu .site-header-menu-inner.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.nav-menu > ul > li > a:after,	
+    .tm-header-style-infostack .tm-mmmenu-override-yes #site-header-menu .site-header-menu-inner.is_stuck .tm-sticky-bgcolor-skincolor  #site-navigation div.mega-menu-wrap   ul.mega-menu.mega-menu-horizontal > li.mega-menu-item > a:after,	
+	.tm-header-style-infostack #site-header-menu .site-header-menu-inner.is_stuck .tm-sticky-bgcolor-skincolor #site-navigation div.nav-menu > ul > li > a:after,		
+    .tm-header-style-infostack .tm-mmmenu-override-yes .site-header-menu-inner.is_stuck .tm-sticky-bgcolor-skincolor #site-header-menu  #site-navigation div.mega-menu-wrap   ul.mega-menu.mega-menu-horizontal > li.mega-menu-item > a:after {
+		background-color: #913985;
+	}
+
+
+/* ********************** Responsive Menu Code END **************************** */
+
+
+
+
+/******************************************************/
+/******************* Custom Code **********************/
+
+
+/******************************************************/
+
+.themetechmount-iconbox-stylefive .tm-icon a:hover:after,
+.tm-ptablebox .tm-sbox-icon-wrapper,
+.tm-ptablebox .themetechmount-ptable-main,
+.themetechmount-box-team:not(.themetechmount-teambox-view-style4) .tm-team-social-links-wrapper,
+.tm-search-overlay,
+.tooltip:after, [data-tooltip]:after,
+.wpb-js-composer .vc_tta-color-skincolor.vc_tta-style-classic .vc_tta-panel-title>a, .wpb-js-composer .vc_tta-color-skincolor.vc_tta-style-classic .vc_tta-tab>a,
+.post.themetechmount-box-blog-classic .themetechmount-blogbox-footer-readmore a,
+#totop:hover,
+.single-tm_team_member .tm-team-social-links-wrapper ul li a,
+.themetechmount-box-team .tm-team-social-links-wrapper,
+.slick-arrow-style1 .slick-dots li:not(.slick-active) button,
+.tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline.active,
+.tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline:active,
+ .tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline:focus,
+ .tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline:hover,
+.vc_progress_bar.vc_progress-bar-color-bar_black .vc_single_bar .vc_bar,
+.tm-col-bgcolor-darkgrey .tm-bg-layer-inner, .site-header-menu.tm-sticky-bgcolor-darkgrey.is_stuck, .tm-bgcolor-darkgrey, .tm-header-style-infostack .site-header .tm-stickable-header.is_stuck.tm-sticky-bgcolor-darkgrey, .tm-header-style-infostack .site-header-menu .is_stuck .tm-sticky-bgcolor-darkgrey, .tm-titlebar-wrapper.tm-breadcrumb-on-bottom.tm-breadcrumb-bgcolor-darkgrey .tm-titlebar .breadcrumb-wrapper .container, .tm-titlebar-wrapper.tm-breadcrumb-on-bottom.tm-breadcrumb-bgcolor-darkgrey .breadcrumb-wrapper .container:before, .tm-titlebar-wrapper.tm-breadcrumb-on-bottom.tm-breadcrumb-bgcolor-darkgrey .breadcrumb-wrapper .container:after,
+.tm-bg.tm-bgcolor-darkgrey .tm-bg-layer {
+   background-color: #913985;
+}
+
+.tm-sbox-style3 .tm-sbox:hover .tm-vc_general.tm-vc_cta3 a.tm-vc_general.tm-vc_btn3:hover {
+	 background-color: #913985 !important;
+}
+
+
+.wpb-js-composer .vc_tta-color-black.vc_tta-style-classic .vc_tta-tab>a,
+.wpb-js-composer .vc_tta-color-skincolor.vc_tta-style-classic .vc_tta-panel-title>a, .wpb-js-composer .vc_tta-color-skincolor.vc_tta-style-classic .vc_tta-tab>a,
+.tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline.active,
+.tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline:active,
+ .tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline:focus,
+ .tm-vc_btn3.tm-vc_btn3-color-black.tm-vc_btn3-style-outline:hover,
+.comment-list a.comment-reply-link {
+	border-color: #913985;
+}
+
+
+.tooltip-top:before, .tooltip:before, [data-tooltip]:before {
+	border-top-color:#913985;
+}
+
+
+.wpb-js-composer .vc_tta-color-black.vc_tta-style-classic .vc_tta-tab>a,
+.twentytwenty-handle, .site-header.tm-sticky-bgcolor-darkgrey.is_stuck, .tm-header-overlay .site-header.tm-sticky-bgcolor-darkgrey.is_stuck, .site-header-menu.tm-sticky-bgcolor-darkgrey.is_stuck, .tm-titlebar-wrapper.tm-breadcrumb-on-bottom.tm-breadcrumb-bgcolor-darkgrey .tm-titlebar .breadcrumb-wrapper .container, .tm-titlebar-wrapper.tm-breadcrumb-on-bottom.tm-breadcrumb-bgcolor-darkgrey .breadcrumb-wrapper .container:before, .tm-titlebar-wrapper.tm-breadcrumb-on-bottom.tm-breadcrumb-bgcolor-darkgrey .breadcrumb-wrapper .container:after, .tm-header-style-infostack .site-header .tm-stickable-header.is_stuck.tm-sticky-bgcolor-darkgrey, .tm-header-style-infostack .site-header-menu .is_stuck .tm-sticky-bgcolor-darkgrey, .tm-header-style-infostack .is_stuck.tm-sticky-bgcolor-darkgrey, .tm-header-style-infostack .tm-bgcolor-darkgrey, .themetechmount-topbar-wrapper.tm-bgcolor-darkgrey{
+	 background-color: #913985;
+}
+
+
+
+
+.elementor-column.elementor-top-column.tm-col-bgcolor-darkgrey:not(.tm-bgimage-yes) .elementor-widget-wrap>.tm-stretched-div, .elementor-column.elementor-top-column.tm-col-bgcolor-darkgrey:not(.tm-col-stretched-yes)>.elementor-widget-wrap, .elementor-column.elementor-inner-column.tm-col-bgcolor-darkgrey:not(.tm-bgimage-yes)>.elementor-widget-wrap
+{
+	background-color: #913985 !important;
+}
+
+
+.elementor-section.elementor-top-section.tm-bgcolor-darkgrey,
+.elementor-section.elementor-top-section.tm-bgcolor-darkgrey:before,
+.elementor-section.elementor-inner-section.tm-bgcolor-darkgreys,
+.elementor-progress-wrapper {
+   background-color: #913985;
+}
+
+.themetechmount-iconbox.themetechmount-icon-bgcolor-darkgrey.tm-iconstyle-outline-boxed .tm-box-icon,
+.themetechmount-iconbox.themetechmount-icon-bgcolor-darkgrey.tm-iconstyle-outline-rounded .tm-box-icon,
+.themetechmount-iconbox.themetechmount-icon-bgcolor-darkgrey.tm-iconstyle-outline-rounded-less .tm-box-icon {
+	border-color: #913985;
+}
+
+.themetechmount-iconbox.themetechmount-icon-bgcolor-darkgrey .tm-box-icon {
+	background-color: #913985;	
+}
