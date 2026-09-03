@@ -49,6 +49,7 @@ Rajesh Pilot Chowk, Garhi Bolni Road, Radha Swami Colony, Bhakti Nagar, Rewari, 
 | Phone (Facebook listed) | +91 98969 07555 |
 | Phone (Justdial listed) | 08488030590 |
 | Email | nmhrewari2022@gmail.com |
+| Tech Support Email | help.nirmalarewari@gmail.com |
 | Facebook | facebook.com/p/Nirmala-Multispeciality-Hospital-100087556417096 (also a similarly named page: facebook.com/medicaremultispecialtyhospital) |
 | Instagram | @nmhrewari — instagram.com/nmhrewari |
 | Google Business Site | nirmala-multispeciality-hospital-private-hospital.business.site (currently returns 404 — may have been taken down or migrated) |
