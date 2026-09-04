@@ -255,7 +255,7 @@ function isDummyInquiry(i) {
     return false;
 }
 
-// Immediate automatic purge on script load
+// Immediate automatic purge on script load & ensure all 3 core faculty doctors are synced
 (function cleanStoredMockData() {
     try {
         const raw = localStorage.getItem(CMS_STORAGE_KEY);
@@ -263,8 +263,21 @@ function isDummyInquiry(i) {
             const parsed = JSON.parse(raw);
             let changed = false;
             if (parsed.doctors) {
-                const cleanDocs = parsed.doctors.filter(d => !isDummyDoctor(d));
-                if (cleanDocs.length !== parsed.doctors.length) { parsed.doctors = cleanDocs; changed = true; }
+                let cleanDocs = parsed.doctors.filter(d => !isDummyDoctor(d));
+                const existingIds = new Set(cleanDocs.map(d => d.id));
+                DEFAULT_CMS_DATA.doctors.forEach(defDoc => {
+                    if (!existingIds.has(defDoc.id)) {
+                        cleanDocs.push(defDoc);
+                        changed = true;
+                    }
+                });
+                if (cleanDocs.length !== parsed.doctors.length || changed) {
+                    parsed.doctors = cleanDocs;
+                    changed = true;
+                }
+            } else {
+                parsed.doctors = [...DEFAULT_CMS_DATA.doctors];
+                changed = true;
             }
             if (parsed.appointments) {
                 const cleanApts = parsed.appointments.filter(a => !isDummyAppointment(a));
@@ -289,11 +302,21 @@ function getCmsData() {
             const parsed = JSON.parse(stored);
             let cleaned = false;
 
-            // Purge dummy doctor 'doc-3' / 'Consultant Surgeon'
-            if (parsed.doctors && parsed.doctors.length > 0) {
-                const initLen = parsed.doctors.length;
-                parsed.doctors = parsed.doctors.filter(d => !isDummyDoctor(d));
-                if (parsed.doctors.length !== initLen) cleaned = true;
+            // Ensure all 3 primary faculty doctors exist (Dr. Jyoti Yadav, Dr. Ravi Yadav, Consultant Orthopedic Surgeon)
+            let currentDocs = (parsed.doctors && parsed.doctors.length > 0) 
+                ? parsed.doctors.filter(d => !isDummyDoctor(d)) 
+                : [...DEFAULT_CMS_DATA.doctors];
+            const existingIds = new Set(currentDocs.map(d => d.id));
+            let docsAdded = false;
+            DEFAULT_CMS_DATA.doctors.forEach(defDoc => {
+                if (!existingIds.has(defDoc.id)) {
+                    currentDocs.push(defDoc);
+                    docsAdded = true;
+                }
+            });
+            if (docsAdded || (parsed.doctors && currentDocs.length !== parsed.doctors.length)) {
+                parsed.doctors = currentDocs;
+                cleaned = true;
             }
 
             // Purge dummy appointments
@@ -315,7 +338,7 @@ function getCmsData() {
                 ...parsed,
                 hospital: { ...DEFAULT_CMS_DATA.hospital, ...(parsed.hospital || {}) },
                 stats: { ...DEFAULT_CMS_DATA.stats, ...(parsed.stats || {}) },
-                doctors: (parsed.doctors && parsed.doctors.length > 0) ? parsed.doctors : DEFAULT_CMS_DATA.doctors,
+                doctors: currentDocs,
                 services: (parsed.services && parsed.services.length > 0) ? parsed.services : DEFAULT_CMS_DATA.services,
                 appointments: parsed.appointments || [],
                 inquiries: parsed.inquiries || []
@@ -376,6 +399,10 @@ function initFirestoreSync() {
                 if (cloudData && cloudData.hospital) {
                     if (cloudData.doctors) {
                         cloudData.doctors = cloudData.doctors.filter(d => !isDummyDoctor(d));
+                        const cIds = new Set(cloudData.doctors.map(d => d.id));
+                        DEFAULT_CMS_DATA.doctors.forEach(defDoc => {
+                            if (!cIds.has(defDoc.id)) cloudData.doctors.push(defDoc);
+                        });
                     }
                     if (cloudData.appointments) {
                         cloudData.appointments = cloudData.appointments.filter(a => !isDummyAppointment(a));

@@ -1783,7 +1783,7 @@
                         <div class="stat-card">
                             <div class="stat-icon pink"><i class="fas fa-user-md"></i></div>
                             <div class="stat-details">
-                                <h4 id="statTotalDoctors">2</h4>
+                                <h4 id="statTotalDoctors">3</h4>
                                 <p>Specialist Doctors</p>
                             </div>
                         </div>
@@ -3018,13 +3018,13 @@
             const data = NirmalaCMS.get();
             let changed = false;
 
-            // 1. Purge dummy doctors (keep only real doctors Dr. Jyoti Yadav & Dr. Ravi Yadav)
+            // 1. Purge dummy doctors (keep real faculty: Dr. Jyoti Yadav, Dr. Ravi Yadav, and Consultant Orthopedic Surgeon)
             if (data.doctors && data.doctors.length > 0) {
                 const initLen = data.doctors.length;
                 data.doctors = data.doctors.filter(d => 
-                    d.id !== 'doc-3' && 
-                    !d.name.toLowerCase().includes('consultant') &&
-                    !d.name.toLowerCase().includes('dummy')
+                    d.id !== 'doc-dummy' && 
+                    !d.name.toLowerCase().includes('dummy') &&
+                    !d.name.toLowerCase().includes('test doctor')
                 );
                 if (data.doctors.length !== initLen) changed = true;
             }
