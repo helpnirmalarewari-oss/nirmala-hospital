@@ -2810,7 +2810,7 @@
             const allowedHashes = [...MASTER_PASSWORD_HASHES];
             if (customHash) allowedHashes.push(customHash);
 
-            if (allowedHashes.includes(hashed) || ['admin123', 'Nirmala@2025', 'NirmalaAdmin@2025', 'help.nirmalarewari'].includes(password)) {
+            if (allowedHashes.includes(hashed)) {
                 authenticated = true;
             }
 
