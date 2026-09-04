@@ -101,17 +101,6 @@ const DEFAULT_CMS_DATA = {
             status: "Available",
             image: "nirmla/dr-ravi.jpg",
             bio: "Specialist in chronic disease management, advanced diabetes care, hypertension, and critical ICU medicine."
-        },
-        {
-            id: "doc-3",
-            name: "Dr. Consultant Surgeon",
-            specialty: "General & Laparoscopic Surgery",
-            qualification: "MBBS, MS, FMAS",
-            experience: "10+ Years Experience",
-            opdTimings: "On Call / Visiting Specialist",
-            status: "Available",
-            image: "nirmla/IMG-20260903-WA0008.jpg",
-            bio: "Specialist in minimally invasive surgery, appendix, hernia, and gallbladder procedures."
         }
     ],
     services: [
@@ -144,63 +133,8 @@ const DEFAULT_CMS_DATA = {
             icon: "fa-bone"
         }
     ],
-    appointments: [
-        {
-            id: "apt-101",
-            patientName: "Reena Kumari",
-            phone: "+91 98123 45678",
-            doctor: "Dr. Jyoti Yadav",
-            department: "Gynecology & Obstetrics",
-            date: "2026-09-05",
-            time: "11:00 AM",
-            status: "Confirmed",
-            notes: "Routine prenatal checkup - 2nd trimester"
-        },
-        {
-            id: "apt-102",
-            patientName: "Surender Singh",
-            phone: "+91 98765 43210",
-            doctor: "Dr. Ravi Yadav",
-            department: "Internal Medicine",
-            date: "2026-09-05",
-            time: "12:30 PM",
-            status: "Confirmed",
-            notes: "Blood sugar review & diabetes monitoring"
-        },
-        {
-            id: "apt-103",
-            patientName: "Kanchan Yadav",
-            phone: "+91 99911 22334",
-            doctor: "Dr. Jyoti Yadav",
-            department: "Gynecology & Obstetrics",
-            date: "2026-09-06",
-            time: "04:30 PM",
-            status: "Pending",
-            notes: "Follow up ultrasound review"
-        }
-    ],
-    inquiries: [
-        {
-            id: "inq-201",
-            name: "Amit Sharma",
-            email: "amit.sharma@example.com",
-            phone: "+91 98120 11223",
-            subject: "Cashless TPA Insurance Inquiry",
-            message: "Does your hospital accept Star Health and HDFC ERGO cashless policy for maternity?",
-            date: "2026-09-04 10:15 AM",
-            status: "New"
-        },
-        {
-            id: "inq-202",
-            name: "Pooja Verma",
-            email: "pooja.v@example.com",
-            phone: "+91 98960 55443",
-            subject: "OPD Timings Dr. Jyoti Yadav",
-            message: "Is Dr. Jyoti Yadav available this Sunday for consultation?",
-            date: "2026-09-03 04:30 PM",
-            status: "Replied"
-        }
-    ],
+    appointments: [],
+    inquiries: [],
     reviews: [
         {
             id: "rev-1",
@@ -262,18 +196,62 @@ async function uploadToImgBB(file) {
     }
 }
 
-// Get CMS Data from Local Storage (merged with defaults)
+// Get CMS Data from Local Storage (merged with defaults and purged of dummy records)
 function getCmsData() {
     try {
         const stored = localStorage.getItem(CMS_STORAGE_KEY);
         if (stored) {
             const parsed = JSON.parse(stored);
-            return {
+            let cleaned = false;
+
+            // Purge dummy doctor 'doc-3' / 'Consultant Surgeon'
+            if (parsed.doctors && parsed.doctors.length > 0) {
+                const initLen = parsed.doctors.length;
+                parsed.doctors = parsed.doctors.filter(d => d.id !== 'doc-3' && !d.name.toLowerCase().includes('consultant'));
+                if (parsed.doctors.length !== initLen) cleaned = true;
+            }
+
+            // Purge dummy appointments ('Reena Kumari', 'Surender Singh', 'Kanchan Yadav')
+            if (parsed.appointments && parsed.appointments.length > 0) {
+                const dummyNames = ['reena kumari', 'surender singh', 'kanchan yadav'];
+                const dummyIds = ['apt-101', 'apt-102', 'apt-103'];
+                const initApts = parsed.appointments.length;
+                parsed.appointments = parsed.appointments.filter(a =>
+                    !dummyIds.includes(a.id) &&
+                    !dummyNames.includes((a.patientName || '').toLowerCase().trim())
+                );
+                if (parsed.appointments.length !== initApts) cleaned = true;
+            }
+
+            // Purge dummy inquiries ('Amit Sharma', 'Pooja Verma')
+            if (parsed.inquiries && parsed.inquiries.length > 0) {
+                const dummyInqNames = ['amit sharma', 'pooja verma'];
+                const dummyInqIds = ['inq-201', 'inq-202'];
+                const initInq = parsed.inquiries.length;
+                parsed.inquiries = parsed.inquiries.filter(i =>
+                    !dummyInqIds.includes(i.id) &&
+                    !dummyInqNames.includes((i.name || '').toLowerCase().trim())
+                );
+                if (parsed.inquiries.length !== initInq) cleaned = true;
+            }
+
+            const merged = {
                 ...DEFAULT_CMS_DATA,
                 ...parsed,
                 hospital: { ...DEFAULT_CMS_DATA.hospital, ...(parsed.hospital || {}) },
-                stats: { ...DEFAULT_CMS_DATA.stats, ...(parsed.stats || {}) }
+                stats: { ...DEFAULT_CMS_DATA.stats, ...(parsed.stats || {}) },
+                doctors: (parsed.doctors && parsed.doctors.length > 0) ? parsed.doctors : DEFAULT_CMS_DATA.doctors,
+                services: (parsed.services && parsed.services.length > 0) ? parsed.services : DEFAULT_CMS_DATA.services,
+                appointments: parsed.appointments || [],
+                inquiries: parsed.inquiries || []
             };
+
+            if (cleaned) {
+                try {
+                    localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(merged));
+                } catch(e) {}
+            }
+            return merged;
         }
     } catch (e) {
         console.error("Error loading CMS data from localStorage", e);

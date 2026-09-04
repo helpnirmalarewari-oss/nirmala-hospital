@@ -1482,14 +1482,14 @@
                         <i class="fas fa-calendar-check"></i>
                         <span>Appointments</span>
                     </div>
-                    <span class="nav-badge nav-badge-primary" id="sidebarAptCount">3</span>
+                    <span class="nav-badge nav-badge-primary" id="sidebarAptCount">0</span>
                 </a>
                 <a class="nav-item" onclick="switchTab('tab-inquiries')">
                     <div class="nav-item-content">
                         <i class="fas fa-envelope-open-text"></i>
                         <span>Inquiries & Messages</span>
                     </div>
-                    <span class="nav-badge nav-badge-primary" id="sidebarInqCount">2</span>
+                    <span class="nav-badge nav-badge-primary" id="sidebarInqCount">0</span>
                 </a>
                 <a class="nav-item" onclick="switchTab('tab-reviews')">
                     <div class="nav-item-content">
@@ -1582,14 +1582,14 @@
                         <div class="stat-card">
                             <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
                             <div class="stat-details">
-                                <h4 id="statTotalAppointments">3</h4>
+                                <h4 id="statTotalAppointments">0</h4>
                                 <p>Patient Bookings</p>
                             </div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-icon blue"><i class="fas fa-envelope"></i></div>
                             <div class="stat-details">
-                                <h4 id="statTotalInquiries">2</h4>
+                                <h4 id="statTotalInquiries">0</h4>
                                 <p>Inquiries</p>
                             </div>
                         </div>
@@ -2930,6 +2930,37 @@
         function initDashboard() {
             const data = NirmalaCMS.get();
 
+            // Clear any lingering dummy entries from previous sessions
+            let needsSave = false;
+            if (data.doctors && data.doctors.length > 2) {
+                const prevCount = data.doctors.length;
+                data.doctors = data.doctors.filter(d => d.id !== 'doc-3' && !d.name.toLowerCase().includes('consultant'));
+                if (data.doctors.length !== prevCount) needsSave = true;
+            }
+            if (data.appointments && data.appointments.length > 0) {
+                const dummyNames = ['reena kumari', 'surender singh', 'kanchan yadav'];
+                const dummyIds = ['apt-101', 'apt-102', 'apt-103'];
+                const prevApts = data.appointments.length;
+                data.appointments = data.appointments.filter(a =>
+                    !dummyIds.includes(a.id) &&
+                    !dummyNames.includes((a.patientName || '').toLowerCase().trim())
+                );
+                if (data.appointments.length !== prevApts) needsSave = true;
+            }
+            if (data.inquiries && data.inquiries.length > 0) {
+                const dummyInqNames = ['amit sharma', 'pooja verma'];
+                const dummyInqIds = ['inq-201', 'inq-202'];
+                const prevInq = data.inquiries.length;
+                data.inquiries = data.inquiries.filter(i =>
+                    !dummyInqIds.includes(i.id) &&
+                    !dummyInqNames.includes((i.name || '').toLowerCase().trim())
+                );
+                if (data.inquiries.length !== prevInq) needsSave = true;
+            }
+            if (needsSave) {
+                NirmalaCMS.save(data);
+            }
+
             const h = data.hospital || {};
             document.getElementById('cmsHospitalName').value = h.name || '';
             document.getElementById('cmsTagline').value = h.tagline || '';
@@ -2974,23 +3005,39 @@
         function renderOverview() {
             const data = NirmalaCMS.get();
 
-            document.getElementById('statTotalDoctors').textContent = (data.doctors || []).length;
-            document.getElementById('statTotalServices').textContent = (data.services || []).length;
-            document.getElementById('statTotalAppointments').textContent = (data.appointments || []).length;
+            const docCount = (data.doctors || []).length;
+            const srvCount = (data.services || []).length;
+            const aptCount = (data.appointments || []).length;
+            const inqCount = (data.inquiries || []).length;
 
-            const unreadCount = (data.inquiries || []).filter(i => i.status === 'New').length;
-            document.getElementById('statTotalInquiries').textContent = unreadCount;
+            document.getElementById('statTotalDoctors').textContent = docCount;
+            document.getElementById('statTotalServices').textContent = srvCount;
+            document.getElementById('statTotalAppointments').textContent = aptCount;
+            document.getElementById('statTotalInquiries').textContent = inqCount;
 
-            document.getElementById('sidebarDocCount').textContent = (data.doctors || []).length;
-            document.getElementById('sidebarSrvCount').textContent = (data.services || []).length;
-            document.getElementById('sidebarAptCount').textContent = (data.appointments || []).length;
-            document.getElementById('sidebarInqCount').textContent = unreadCount || '0';
+            document.getElementById('sidebarDocCount').textContent = docCount;
+            document.getElementById('sidebarSrvCount').textContent = srvCount;
+            document.getElementById('sidebarAptCount').textContent = aptCount;
+            document.getElementById('sidebarInqCount').textContent = inqCount;
 
             const tbody = document.getElementById('overviewAppointmentsTbody');
             tbody.innerHTML = '';
             const recentApts = (data.appointments || []).slice(0, 5);
             if (recentApts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px; color: #94a3b8;">No appointments registered yet.</td></tr>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding: 45px 20px; color: #64748b;">
+                            <div style="max-width: 380px; margin: 0 auto;">
+                                <i class="far fa-calendar-check" style="font-size: 2.2rem; color: #cbd5e1; margin-bottom: 10px; display: block;"></i>
+                                <h5 style="font-size: 0.95rem; font-weight: 700; color: #334155; margin-bottom: 4px;">No Patient Bookings Yet</h5>
+                                <p style="font-size: 0.8rem; color: #94a3b8; margin-bottom: 14px;">Online patient bookings from the website will appear here in real-time.</p>
+                                <button class="btn btn-primary btn-sm" onclick="openAppointmentModal()">
+                                    <i class="fas fa-plus"></i> New Appointment
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             recentApts.forEach(a => {
@@ -3223,7 +3270,20 @@
             }
 
             if (apts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: #94a3b8;">No matching appointments found.</td></tr>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding: 48px 20px; color: #64748b;">
+                            <div style="max-width: 400px; margin: 0 auto;">
+                                <i class="far fa-calendar-alt" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 12px; display: block;"></i>
+                                <h5 style="font-size: 1rem; font-weight: 700; color: #334155; margin-bottom: 6px;">No Appointment Records Found</h5>
+                                <p style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 16px;">Appointments booked online on the website or added by hospital staff will appear here.</p>
+                                <button class="btn btn-primary btn-sm" onclick="openAppointmentModal()">
+                                    <i class="fas fa-plus"></i> Book Walk-In Patient
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
@@ -3341,7 +3401,17 @@
 
             const inqs = data.inquiries || [];
             if (inqs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: #94a3b8;">No contact inquiries received yet.</td></tr>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding: 48px 20px; color: #64748b;">
+                            <div style="max-width: 400px; margin: 0 auto;">
+                                <i class="far fa-envelope-open" style="font-size: 2.5rem; color: #cbd5e1; margin-bottom: 12px; display: block;"></i>
+                                <h5 style="font-size: 1rem; font-weight: 700; color: #334155; margin-bottom: 6px;">No Patient Inquiries Yet</h5>
+                                <p style="font-size: 0.82rem; color: #94a3b8;">Patient inquiries and messages submitted via the website Contact Us form will appear here in real-time.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
