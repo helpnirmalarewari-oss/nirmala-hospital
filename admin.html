@@ -1241,9 +1241,19 @@
 
         .modal-close:hover { color: var(--danger); }
 
+        .modal-card form {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+        }
+
         .modal-body {
             padding: 24px;
             overflow-y: auto;
+            flex: 1 1 auto;
+            min-height: 0;
         }
 
         /* --- Toast Notifications --- */
@@ -2514,7 +2524,7 @@
     <div id="reviewModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>Add Patient Testimonial</h3>
+                <h3 id="reviewModalTitle">Add Patient Testimonial</h3>
                 <button class="modal-close" onclick="closeModal('reviewModal')">&times;</button>
             </div>
             <form onsubmit="handleSaveReview(event)">
@@ -2554,11 +2564,12 @@
     <div id="galleryModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h3>Add Facility Photo (ImgBB)</h3>
+                <h3 id="galleryModalTitle">Add Facility Photo (ImgBB)</h3>
                 <button class="modal-close" onclick="closeModal('galleryModal')">&times;</button>
             </div>
             <form onsubmit="handleSaveGallery(event)">
                 <div class="modal-body">
+                    <input type="hidden" id="galEditId">
                     <div class="form-group col-full" style="margin-bottom: 16px;">
                         <label><i class="fas fa-image"></i> Facility Photo</label>
                         <div class="imgbb-uploader">
@@ -2589,7 +2600,7 @@
                 </div>
                 <div class="modal-header" style="justify-content: flex-end; background: #fafafa; border-top: 1px solid var(--border);">
                     <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('galleryModal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary btn-sm">Add to Gallery</button>
+                    <button type="submit" id="galSubmitBtn" class="btn btn-primary btn-sm">Save Photo</button>
                 </div>
             </form>
         </div>
@@ -3391,6 +3402,7 @@
             if (id) {
                 const idx = data.doctors.findIndex(d => d.id === id);
                 if (idx !== -1) data.doctors[idx] = docObj;
+                else data.doctors.push(docObj);
             } else {
                 data.doctors.push(docObj);
             }
@@ -3476,6 +3488,7 @@
             if (id) {
                 const idx = data.services.findIndex(s => s.id === id);
                 if (idx !== -1) data.services[idx] = srvObj;
+                else data.services.push(srvObj);
             } else {
                 data.services.push(srvObj);
             }
@@ -3620,6 +3633,7 @@
             if (id) {
                 const idx = data.appointments.findIndex(a => a.id === id);
                 if (idx !== -1) data.appointments[idx] = aptObj;
+                else data.appointments.unshift(aptObj);
             } else {
                 data.appointments.unshift(aptObj);
             }
@@ -3724,6 +3738,7 @@
                         <td><small>${rev.source} • ${rev.date}</small></td>
                         <td style="text-align: right;">
                             <div class="table-actions" style="justify-content: flex-end;">
+                                <button class="action-btn" onclick="editReview('${rev.id}')" title="Edit Review"><i class="fas fa-edit"></i></button>
                                 <button class="action-btn delete" onclick="deleteReview('${rev.id}')" title="Delete Review"><i class="fas fa-trash-alt"></i></button>
                             </div>
                         </td>
@@ -3732,19 +3747,28 @@
             });
         }
 
-        function openReviewModal() {
-            document.getElementById('revAuthor').value = '';
-            document.getElementById('revRating').value = '5';
-            document.getElementById('revSource').value = 'Google 4.8★';
-            document.getElementById('revComment').value = '';
+        function openReviewModal(rev = null) {
+            document.getElementById('revEditId').value = rev ? rev.id : '';
+            document.getElementById('revAuthor').value = rev ? rev.author : '';
+            document.getElementById('revRating').value = rev ? rev.rating : '5';
+            document.getElementById('revSource').value = rev ? rev.source : 'Google 4.8★';
+            document.getElementById('revComment').value = rev ? rev.comment : '';
+            document.getElementById('reviewModalTitle').textContent = rev ? 'Edit Patient Testimonial' : 'Add Patient Testimonial';
             openModal('reviewModal');
+        }
+
+        function editReview(id) {
+            const data = NirmalaCMS.get();
+            const rev = (data.reviews || []).find(r => r.id === id);
+            if (rev) openReviewModal(rev);
         }
 
         function handleSaveReview(e) {
             e.preventDefault();
             const data = NirmalaCMS.get();
-            const newRev = {
-                id: 'rev-' + Date.now(),
+            const id = document.getElementById('revEditId').value;
+            const revObj = {
+                id: id || 'rev-' + Date.now(),
                 author: document.getElementById('revAuthor').value.trim(),
                 rating: parseInt(document.getElementById('revRating').value, 10),
                 comment: document.getElementById('revComment').value.trim(),
@@ -3752,11 +3776,17 @@
                 date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
             };
             data.reviews = data.reviews || [];
-            data.reviews.unshift(newRev);
+            if (id) {
+                const idx = data.reviews.findIndex(r => r.id === id);
+                if (idx !== -1) data.reviews[idx] = revObj;
+                else data.reviews.unshift(revObj);
+            } else {
+                data.reviews.unshift(revObj);
+            }
             NirmalaCMS.save(data);
             closeModal('reviewModal');
             renderReviews();
-            showToast('New patient review added!');
+            showToast('Patient review saved & synced to Cloud!');
         }
 
         function deleteReview(id) {
@@ -3787,6 +3817,9 @@
                             <p style="font-size: 0.8rem; color: #94a3b8; font-family: monospace; word-break: break-all;">${item.image}</p>
                         </div>
                         <div class="doctor-card-footer">
+                            <button class="btn btn-secondary btn-sm" onclick="editGalleryItem('${item.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
                             <button class="action-btn delete" onclick="deleteGalleryItem('${item.id}')" title="Delete Photo">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
@@ -3796,30 +3829,46 @@
             });
         }
 
-        function openGalleryModal() {
-            document.getElementById('galTitle').value = '';
-            document.getElementById('galCat').value = 'Facility';
-            document.getElementById('galImg').value = '';
-            document.getElementById('galImgPreview').src = 'nirmla/IMG-20260903-WA0023.jpg';
-            document.getElementById('galUploadStatus').innerHTML = 'Upload OT/ICU/Ward photo.';
+        function openGalleryModal(item = null) {
+            document.getElementById('galEditId').value = item ? item.id : '';
+            document.getElementById('galTitle').value = item ? item.title : '';
+            document.getElementById('galCat').value = item ? item.category : 'Facility';
+            document.getElementById('galImg').value = item ? item.image : '';
+            document.getElementById('galImgPreview').src = item ? (item.image || 'nirmla/IMG-20260903-WA0023.jpg') : 'nirmla/IMG-20260903-WA0023.jpg';
+            document.getElementById('galUploadStatus').innerHTML = item ? 'Update facility photo.' : 'Upload OT/ICU/Ward photo.';
+            document.getElementById('galleryModalTitle').textContent = item ? 'Edit Facility Photo' : 'Add Facility Photo (ImgBB)';
+            document.getElementById('galSubmitBtn').textContent = item ? 'Save Changes' : 'Add to Gallery';
             openModal('galleryModal');
+        }
+
+        function editGalleryItem(id) {
+            const data = NirmalaCMS.get();
+            const item = (data.gallery || []).find(g => g.id === id);
+            if (item) openGalleryModal(item);
         }
 
         function handleSaveGallery(e) {
             e.preventDefault();
             const data = NirmalaCMS.get();
-            const newItem = {
-                id: 'gal-' + Date.now(),
+            const id = document.getElementById('galEditId').value;
+            const itemObj = {
+                id: id || 'gal-' + Date.now(),
                 title: document.getElementById('galTitle').value.trim(),
                 category: document.getElementById('galCat').value.trim(),
                 image: document.getElementById('galImg').value.trim()
             };
             data.gallery = data.gallery || [];
-            data.gallery.push(newItem);
+            if (id) {
+                const idx = data.gallery.findIndex(g => g.id === id);
+                if (idx !== -1) data.gallery[idx] = itemObj;
+                else data.gallery.push(itemObj);
+            } else {
+                data.gallery.push(itemObj);
+            }
             NirmalaCMS.save(data);
             closeModal('galleryModal');
             renderGallery();
-            showToast('New photo added to gallery & synced to Cloud!');
+            showToast('Facility photo saved & synced to Cloud!');
         }
 
         function deleteGalleryItem(id) {

@@ -255,29 +255,29 @@ function isDummyInquiry(i) {
     return false;
 }
 
-// Immediate automatic purge on script load & ensure all 3 core faculty doctors are synced
+// Immediate automatic clean on script load (one-time initialization)
 (function cleanStoredMockData() {
     try {
         const raw = localStorage.getItem(CMS_STORAGE_KEY);
         if (raw) {
             const parsed = JSON.parse(raw);
             let changed = false;
-            if (parsed.doctors) {
-                let cleanDocs = parsed.doctors.filter(d => !isDummyDoctor(d));
-                const existingIds = new Set(cleanDocs.map(d => d.id));
-                DEFAULT_CMS_DATA.doctors.forEach(defDoc => {
-                    if (!existingIds.has(defDoc.id)) {
-                        cleanDocs.push(defDoc);
-                        changed = true;
-                    }
-                });
-                if (cleanDocs.length !== parsed.doctors.length || changed) {
-                    parsed.doctors = cleanDocs;
+
+            // One-time initialization of initial doctors if not set
+            if (!parsed._v3_initialized) {
+                parsed._v3_initialized = true;
+                if (!Array.isArray(parsed.doctors) || parsed.doctors.length === 0) {
+                    parsed.doctors = [...DEFAULT_CMS_DATA.doctors];
                     changed = true;
+                } else {
+                    const existingIds = new Set(parsed.doctors.map(d => d.id));
+                    DEFAULT_CMS_DATA.doctors.forEach(defDoc => {
+                        if (!existingIds.has(defDoc.id)) {
+                            parsed.doctors.push(defDoc);
+                            changed = true;
+                        }
+                    });
                 }
-            } else {
-                parsed.doctors = [...DEFAULT_CMS_DATA.doctors];
-                changed = true;
             }
             if (parsed.appointments) {
                 const cleanApts = parsed.appointments.filter(a => !isDummyAppointment(a));
@@ -294,83 +294,46 @@ function isDummyInquiry(i) {
     } catch(e) {}
 })();
 
-// Get CMS Data from Local Storage (merged with defaults and strictly purged of dummy records)
+// Get CMS Data from Local Storage (returns actual stored state without resurrecting deleted items)
 function getCmsData() {
     try {
         const stored = localStorage.getItem(CMS_STORAGE_KEY);
         if (stored) {
             const parsed = JSON.parse(stored);
-            let cleaned = false;
-
-            // Ensure all 3 primary faculty doctors exist (Dr. Jyoti Yadav, Dr. Ravi Yadav, Consultant Orthopedic Surgeon)
-            let currentDocs = (parsed.doctors && parsed.doctors.length > 0) 
-                ? parsed.doctors.filter(d => !isDummyDoctor(d)) 
-                : [...DEFAULT_CMS_DATA.doctors];
-            const existingIds = new Set(currentDocs.map(d => d.id));
-            let docsAdded = false;
-            DEFAULT_CMS_DATA.doctors.forEach(defDoc => {
-                if (!existingIds.has(defDoc.id)) {
-                    currentDocs.push(defDoc);
-                    docsAdded = true;
-                }
-            });
-            if (docsAdded || (parsed.doctors && currentDocs.length !== parsed.doctors.length)) {
-                parsed.doctors = currentDocs;
-                cleaned = true;
-            }
-
-            // Purge dummy appointments
-            if (parsed.appointments && parsed.appointments.length > 0) {
-                const initApts = parsed.appointments.length;
-                parsed.appointments = parsed.appointments.filter(a => !isDummyAppointment(a));
-                if (parsed.appointments.length !== initApts) cleaned = true;
-            }
-
-            // Purge dummy inquiries
-            if (parsed.inquiries && parsed.inquiries.length > 0) {
-                const initInq = parsed.inquiries.length;
-                parsed.inquiries = parsed.inquiries.filter(i => !isDummyInquiry(i));
-                if (parsed.inquiries.length !== initInq) cleaned = true;
-            }
-
-            const merged = {
+            return {
                 ...DEFAULT_CMS_DATA,
                 ...parsed,
                 hospital: { ...DEFAULT_CMS_DATA.hospital, ...(parsed.hospital || {}) },
                 stats: { ...DEFAULT_CMS_DATA.stats, ...(parsed.stats || {}) },
-                doctors: currentDocs,
-                services: (parsed.services && parsed.services.length > 0) ? parsed.services : DEFAULT_CMS_DATA.services,
-                appointments: parsed.appointments || [],
-                inquiries: parsed.inquiries || []
+                doctors: Array.isArray(parsed.doctors) ? parsed.doctors : [...DEFAULT_CMS_DATA.doctors],
+                services: Array.isArray(parsed.services) ? parsed.services : [...DEFAULT_CMS_DATA.services],
+                appointments: Array.isArray(parsed.appointments) ? parsed.appointments : [],
+                inquiries: Array.isArray(parsed.inquiries) ? parsed.inquiries : [],
+                reviews: Array.isArray(parsed.reviews) ? parsed.reviews : [...DEFAULT_CMS_DATA.reviews],
+                gallery: Array.isArray(parsed.gallery) ? parsed.gallery : [...DEFAULT_CMS_DATA.gallery]
             };
-
-            if (cleaned) {
-                try {
-                    localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(merged));
-                } catch(e) {}
-            }
-            return merged;
         }
     } catch (e) {
         console.error("Error loading CMS data from localStorage", e);
     }
-    try {
-        localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(DEFAULT_CMS_DATA));
-    } catch (e) {}
-    return DEFAULT_CMS_DATA;
+    const initial = { ...DEFAULT_CMS_DATA, _v3_initialized: true };
+    try { localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(initial)); } catch (e) {}
+    return initial;
 }
 
 // Save CMS Data locally and to Cloud Firestore
 function saveCmsData(data) {
     try {
+        data.lastUpdated = Date.now();
+        data._v3_initialized = true;
         localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(data));
         window.dispatchEvent(new CustomEvent('cms-data-updated', { detail: data }));
 
-        // Sync to Firebase Cloud Firestore if available
+        // Sync to Firebase Cloud Firestore cleanly without merge artifacts
         if (firestoreDb) {
-            firestoreDb.collection('hospital_cms').doc('live_data').set(data, { merge: true })
+            firestoreDb.collection('hospital_cms').doc('live_data').set(data)
                 .then(() => console.log("CMS Data successfully synced to Firebase Cloud Firestore."))
-                .catch(err => console.warn("Firestore sync notice (saved locally):", err));
+                .catch(err => console.warn("Firestore cloud sync notice:", err));
         }
         return true;
     } catch (e) {
@@ -396,34 +359,24 @@ function initFirestoreSync() {
         firestoreDb.collection('hospital_cms').doc('live_data').onSnapshot(doc => {
             if (doc.exists) {
                 const cloudData = doc.data();
-                if (cloudData && cloudData.hospital) {
-                    if (cloudData.doctors) {
-                        cloudData.doctors = cloudData.doctors.filter(d => !isDummyDoctor(d));
-                        const cIds = new Set(cloudData.doctors.map(d => d.id));
-                        DEFAULT_CMS_DATA.doctors.forEach(defDoc => {
-                            if (!cIds.has(defDoc.id)) cloudData.doctors.push(defDoc);
-                        });
-                    }
-                    if (cloudData.appointments) {
-                        cloudData.appointments = cloudData.appointments.filter(a => !isDummyAppointment(a));
-                    }
-                    if (cloudData.inquiries) {
-                        cloudData.inquiries = cloudData.inquiries.filter(i => !isDummyInquiry(i));
-                    }
+                const localData = getCmsData();
+                // Protect local edits: only apply cloudData if cloudData is newer than local edits
+                if (cloudData && (!localData.lastUpdated || (cloudData.lastUpdated && cloudData.lastUpdated > localData.lastUpdated))) {
                     const merged = {
                         ...DEFAULT_CMS_DATA,
                         ...cloudData,
-                        hospital: { ...DEFAULT_CMS_DATA.hospital, ...(cloudData.hospital || {}) },
-                        stats: { ...DEFAULT_CMS_DATA.stats, ...(cloudData.stats || {}) }
+                        _v3_initialized: true
                     };
                     saveCmsDataLocally(merged);
                     applyCmsToCurrentPage();
                     if (typeof renderOverview === 'function') renderOverview();
+                    if (typeof renderDoctors === 'function') renderDoctors();
+                    if (typeof renderServices === 'function') renderServices();
                 }
             }
         }, err => {
             if (err && err.code === 'permission-denied') {
-                console.info("Firestore Live Sync: Awaiting Firestore Security Rules in Firebase Console. Using local cached data seamlessly.");
+                console.info("Firestore Live Sync: Using local cached data seamlessly.");
             } else {
                 console.warn("Firestore live snapshot notice:", err);
             }
@@ -556,7 +509,41 @@ function applyCmsToCurrentPage() {
         });
     }
 
-    // 8. Connect appointment & contact forms so submissions save to Cloud Firestore & Dashboard
+    // 8. Dynamic Doctors Rendering on public pages (team.html & index.html)
+    const doctorsRow = document.getElementById('cmsDoctorsContainer');
+    if (doctorsRow && Array.isArray(data.doctors)) {
+        doctorsRow.innerHTML = '';
+        data.doctors.forEach((doc, idx) => {
+            const delay = (0.2 * (idx + 1)).toFixed(1) + 's';
+            const statusBadge = doc.status ? `<span class="badge bg-primary text-white px-3 py-2 rounded-pill shadow-sm"><i class="fa fa-clock me-1"></i> ${doc.status}</span>` : '';
+            doctorsRow.innerHTML += `
+                <div class="col-lg-4 col-md-6 wow slideInUp" data-wow-delay="${delay}">
+                    <div class="team-item bg-light rounded overflow-hidden shadow-sm h-100 d-flex flex-column">
+                        <div class="position-relative" style="height: 340px; overflow: hidden;">
+                            <img class="w-100 h-100" src="${doc.image || 'hero-01.png'}" alt="${doc.name}" style="object-fit: cover; object-position: top center;" onerror="this.src='hero-01.png'">
+                            <div class="position-absolute top-0 start-0 m-3">
+                                ${statusBadge}
+                            </div>
+                        </div>
+                        <div class="team-text p-4 text-center flex-grow-1 d-flex flex-column justify-content-between">
+                            <div>
+                                <h4 class="mb-1">${doc.name}</h4>
+                                <p class="text-primary fw-bold mb-1">${doc.specialty}</p>
+                                <p class="text-muted small mb-2">${doc.qualification || ''} ${doc.experience ? ' | ' + doc.experience : ''}</p>
+                                <p class="text-secondary small mb-3">${doc.bio || ''}</p>
+                            </div>
+                            <div class="pt-3 border-top">
+                                <small class="text-dark d-block mb-3"><i class="fa fa-calendar-alt text-primary me-2"></i>${doc.opdTimings || 'Regular Hours'}</small>
+                                <a href="contact.html" class="btn btn-primary btn-sm px-4 py-2 w-100"><i class="fa fa-calendar-check me-2"></i>Book OPD Appointment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    // 9. Connect appointment & contact forms so submissions save to Cloud Firestore & Dashboard
     wireWebsiteForms(data);
 }
 
