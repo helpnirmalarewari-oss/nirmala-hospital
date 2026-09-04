@@ -196,7 +196,81 @@ async function uploadToImgBB(file) {
     }
 }
 
-// Get CMS Data from Local Storage (merged with defaults and purged of dummy records)
+// Helper validators to ensure NO dummy/test data ever pollutes the dashboard
+function isDummyDoctor(d) {
+    if (!d) return true;
+    const name = (d.name || '').toLowerCase();
+    const id = (d.id || '').toLowerCase();
+    if (id === 'doc-3' || id === 'doc-surgeon' || name.includes('consultant') || name.includes('surgeon') || name.includes('dummy')) return true;
+    return false;
+}
+
+function isDummyAppointment(a) {
+    if (!a) return true;
+    const name = (a.patientName || a.name || a.patient || '').toLowerCase().trim();
+    const phone = (a.phone || a.contact || a.mobile || '').replace(/\D/g, '');
+    const id = (a.id || '').toLowerCase();
+    
+    // Purge dummy names (Reena Kumari, Surender Singh, Kanchan Yadav from test mockups)
+    const dummyNames = ['reena kumari', 'surender singh', 'kanchan yadav', 'reena', 'surender', 'kanchan', 'test patient', 'dummy'];
+    if (dummyNames.some(d => name.includes(d))) return true;
+    
+    // Purge dummy phones
+    const dummyPhones = ['9812345678', '9876543210', '9991122334', '1234567890'];
+    if (dummyPhones.some(p => phone.includes(p))) return true;
+    
+    // Purge dummy IDs
+    const dummyIds = ['apt-1', 'apt-2', 'apt-3', 'apt-101', 'apt-102', 'apt-103', 'apt-01', 'apt-02', 'apt-03'];
+    if (dummyIds.includes(id)) return true;
+    
+    return false;
+}
+
+function isDummyInquiry(i) {
+    if (!i) return true;
+    const name = (i.name || i.sender || '').toLowerCase().trim();
+    const email = (i.email || '').toLowerCase().trim();
+    const id = (i.id || '').toLowerCase();
+    
+    const dummyNames = ['amit sharma', 'pooja verma', 'amit', 'pooja', 'test inquiry', 'dummy'];
+    if (dummyNames.some(d => name.includes(d))) return true;
+    
+    const dummyEmails = ['amit.sharma@example.com', 'pooja.verma@example.com', 'test@example.com'];
+    if (dummyEmails.some(e => email.includes(e))) return true;
+    
+    const dummyIds = ['inq-1', 'inq-2', 'inq-101', 'inq-102', 'inq-201', 'inq-202'];
+    if (dummyIds.includes(id)) return true;
+    
+    return false;
+}
+
+// Immediate automatic purge on script load
+(function cleanStoredMockData() {
+    try {
+        const raw = localStorage.getItem(CMS_STORAGE_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            let changed = false;
+            if (parsed.doctors) {
+                const cleanDocs = parsed.doctors.filter(d => !isDummyDoctor(d));
+                if (cleanDocs.length !== parsed.doctors.length) { parsed.doctors = cleanDocs; changed = true; }
+            }
+            if (parsed.appointments) {
+                const cleanApts = parsed.appointments.filter(a => !isDummyAppointment(a));
+                if (cleanApts.length !== parsed.appointments.length) { parsed.appointments = cleanApts; changed = true; }
+            }
+            if (parsed.inquiries) {
+                const cleanInq = parsed.inquiries.filter(i => !isDummyInquiry(i));
+                if (cleanInq.length !== parsed.inquiries.length) { parsed.inquiries = cleanInq; changed = true; }
+            }
+            if (changed) {
+                localStorage.setItem(CMS_STORAGE_KEY, JSON.stringify(parsed));
+            }
+        }
+    } catch(e) {}
+})();
+
+// Get CMS Data from Local Storage (merged with defaults and strictly purged of dummy records)
 function getCmsData() {
     try {
         const stored = localStorage.getItem(CMS_STORAGE_KEY);
@@ -207,31 +281,21 @@ function getCmsData() {
             // Purge dummy doctor 'doc-3' / 'Consultant Surgeon'
             if (parsed.doctors && parsed.doctors.length > 0) {
                 const initLen = parsed.doctors.length;
-                parsed.doctors = parsed.doctors.filter(d => d.id !== 'doc-3' && !d.name.toLowerCase().includes('consultant'));
+                parsed.doctors = parsed.doctors.filter(d => !isDummyDoctor(d));
                 if (parsed.doctors.length !== initLen) cleaned = true;
             }
 
-            // Purge dummy appointments ('Reena Kumari', 'Surender Singh', 'Kanchan Yadav')
+            // Purge dummy appointments
             if (parsed.appointments && parsed.appointments.length > 0) {
-                const dummyNames = ['reena kumari', 'surender singh', 'kanchan yadav'];
-                const dummyIds = ['apt-101', 'apt-102', 'apt-103'];
                 const initApts = parsed.appointments.length;
-                parsed.appointments = parsed.appointments.filter(a =>
-                    !dummyIds.includes(a.id) &&
-                    !dummyNames.includes((a.patientName || '').toLowerCase().trim())
-                );
+                parsed.appointments = parsed.appointments.filter(a => !isDummyAppointment(a));
                 if (parsed.appointments.length !== initApts) cleaned = true;
             }
 
-            // Purge dummy inquiries ('Amit Sharma', 'Pooja Verma')
+            // Purge dummy inquiries
             if (parsed.inquiries && parsed.inquiries.length > 0) {
-                const dummyInqNames = ['amit sharma', 'pooja verma'];
-                const dummyInqIds = ['inq-201', 'inq-202'];
                 const initInq = parsed.inquiries.length;
-                parsed.inquiries = parsed.inquiries.filter(i =>
-                    !dummyInqIds.includes(i.id) &&
-                    !dummyInqNames.includes((i.name || '').toLowerCase().trim())
-                );
+                parsed.inquiries = parsed.inquiries.filter(i => !isDummyInquiry(i));
                 if (parsed.inquiries.length !== initInq) cleaned = true;
             }
 
@@ -299,6 +363,15 @@ function initFirestoreSync() {
             if (doc.exists) {
                 const cloudData = doc.data();
                 if (cloudData && cloudData.hospital) {
+                    if (cloudData.doctors) {
+                        cloudData.doctors = cloudData.doctors.filter(d => !isDummyDoctor(d));
+                    }
+                    if (cloudData.appointments) {
+                        cloudData.appointments = cloudData.appointments.filter(a => !isDummyAppointment(a));
+                    }
+                    if (cloudData.inquiries) {
+                        cloudData.inquiries = cloudData.inquiries.filter(i => !isDummyInquiry(i));
+                    }
                     const merged = {
                         ...DEFAULT_CMS_DATA,
                         ...cloudData,
@@ -307,6 +380,7 @@ function initFirestoreSync() {
                     };
                     saveCmsDataLocally(merged);
                     applyCmsToCurrentPage();
+                    if (typeof renderOverview === 'function') renderOverview();
                 }
             }
         }, err => {
@@ -322,7 +396,10 @@ function initFirestoreSync() {
             if (!snapshot.empty) {
                 const apts = [];
                 snapshot.forEach(doc => {
-                    apts.push({ id: doc.id, ...doc.data() });
+                    const aptData = { id: doc.id, ...doc.data() };
+                    if (!isDummyAppointment(aptData)) {
+                        apts.push(aptData);
+                    }
                 });
                 const cur = getCmsData();
                 cur.appointments = apts;
