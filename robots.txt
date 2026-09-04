@@ -1,0 +1,10 @@
+# Robots.txt for Nirmala Multispeciality Hospital Rewari
+User-agent: *
+Allow: /
+
+# Disallow private administrative portal from search engine indexation
+Disallow: /admin.html
+Disallow: /admin
+
+# Canonical XML Sitemap
+Sitemap: https://www.nirmalahospitalrewari.in/sitemap.xml
