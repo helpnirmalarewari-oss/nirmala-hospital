@@ -2,7 +2,7 @@
   "version": 2,
   "headers": [
     {
-      "source": "/(.*\\.(woff2|woff|ttf|eot|svg))",
+      "source": "/fonts/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -15,7 +15,59 @@
       ]
     },
     {
-      "source": "/(.*\\.(jpg|jpeg|png|webp|avif|ico))",
+      "source": "/webfonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/lib/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/fa-(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/bootstrap-icons(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/img/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -24,7 +76,16 @@
       ]
     },
     {
-      "source": "/(.*\\.(css|js))",
+      "source": "/css/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/js/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
