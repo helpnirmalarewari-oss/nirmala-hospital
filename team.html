@@ -48,7 +48,19 @@
           "@type": "Physician",
           "name": "Dr. Ravi Yadav",
           "jobTitle": "Consultant Physician & Diabetologist",
-          "description": "MBBS, MD (Internal Medicine). 14+ Years Experience. Specialist in diabetes management, hypertension and ICU medicine.",
+          "description": "MBBS, MD (Internal Medicine). 14+ Years Experience. Specialist in diabetes management, hypertension, asthma and ICU medicine.",
+          "worksFor": {
+            "@type": "Hospital",
+            "name": "Nirmala Multispeciality Hospital",
+            "telephone": "+91-9896907555",
+            "url": "https://www.nirmalahospitalrewari.in/"
+          }
+        },
+        {
+          "@type": "Physician",
+          "name": "Consultant Orthopedic Surgeon",
+          "jobTitle": "Consultant Orthopedic & Joint Replacement Surgeon",
+          "description": "MBBS, MS (Orthopaedics). Specialist in joint replacement (knee & hip), fracture trauma care, and arthritis management.",
           "worksFor": {
             "@type": "Hospital",
             "name": "Nirmala Multispeciality Hospital",
@@ -152,10 +164,10 @@
     <div class="container-fluid bg-primary py-5 hero-header mb-5">
         <div class="row py-3">
             <div class="col-12 text-center">
-                <h1 class="display-3 text-white animated zoomIn">Dentist</h1>
-                <a href="" class="h4 text-white">Home</a>
+                <h1 class="display-3 text-white animated zoomIn">Our Doctors & Faculty</h1>
+                <a href="index.html" class="h4 text-white">Home</a>
                 <i class="far fa-circle text-white px-2"></i>
-                <a href="" class="h4 text-white">Dentist</a>
+                <a href="team.html" class="h4 text-white">Doctors & Daily OPD</a>
             </div>
         </div>
     </div>
@@ -165,49 +177,97 @@
     <!-- Team Start -->
     <div class="container-fluid py-5">
         <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.1s">
-                    <div class="section-title bg-light rounded h-100 p-5">
-                        <h5 class="position-relative d-inline-block text-primary text-uppercase">Our Doctors</h5>
-                        <h1 class="display-6 mb-4">Meet Our Certified & Experienced Doctors</h1>
-                        <a href="contact.html" class="btn btn-primary py-3 px-5">Appointment</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.3s">
-                    <div class="team-item">
-                        <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="nirmla/dr-jyoti.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-instagram fw-normal"></i></a>
+            <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 750px;">
+                <h5 class="position-relative d-inline-block text-primary text-uppercase">Our Medical Faculty</h5>
+                <h1 class="display-5 mb-3">Meet Our Expert Doctors & Daily OPD Faculty</h1>
+                <p class="text-muted fs-5">Primary medical faculty providing daily OPD consultations, specialized surgery, and 24x7 emergency care in Rewari.</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <!-- Dr. Ravi Yadav - Doc for Medicine -->
+                <div class="col-lg-4 col-md-6 wow slideInUp" data-wow-delay="0.2s">
+                    <div class="team-item bg-light rounded overflow-hidden shadow-sm h-100 d-flex flex-column">
+                        <div class="position-relative" style="height: 340px; overflow: hidden;">
+                            <img class="w-100 h-100" src="nirmla/dr-ravi.jpg" alt="Dr. Ravi Yadav - Consultant Physician in Rewari" style="object-fit: cover; object-position: top center;">
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-primary text-white px-3 py-2 rounded-pill shadow-sm"><i class="fa fa-clock me-1"></i> Daily OPD</span>
                             </div>
                         </div>
-                        <div class="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                            <h4 class="mb-2">Dr. Jyoti Yadav</h4>
-                            <p class="text-primary mb-0">Obstetrics & Gynaecology</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow slideInUp" data-wow-delay="0.6s">
-                    <div class="team-item">
-                        <div class="position-relative rounded-top" style="z-index: 1;">
-                            <img class="img-fluid rounded-top w-100" src="nirmla/dr-ravi.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle bg-light rounded p-2 d-flex">
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-twitter fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-facebook-f fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-linkedin-in fw-normal"></i></a>
-                                <a class="btn btn-primary btn-square m-1" href="#"><i class="fab fa-instagram fw-normal"></i></a>
+                        <div class="team-text p-4 text-center flex-grow-1 d-flex flex-column justify-content-between">
+                            <div>
+                                <h4 class="mb-1">Dr. Ravi Yadav</h4>
+                                <p class="text-primary fw-bold mb-1">Consultant Physician (Doc for Medicine)</p>
+                                <p class="text-muted small mb-2">MBBS, MD (Internal Medicine) | FIDM (Diabetology)</p>
+                                <p class="text-secondary small mb-3">Specialist in Diabetes, Hypertension, Thyroid, Fever, Asthma & ICU Medicine</p>
                             </div>
-                        </div>
-                        <div class="team-text position-relative bg-light text-center rounded-bottom p-4 pt-5">
-                            <h4 class="mb-2">Dr. Ravi Yadav</h4>
-                            <p class="text-primary mb-0">Internal Medicine & Diabetology</p>
+                            <div class="pt-3 border-top">
+                                <small class="text-dark d-block mb-3"><i class="fa fa-calendar-alt text-primary me-2"></i>Mon - Sun: 09:00 AM - 02:00 PM & 05:00 PM - 09:00 PM</small>
+                                <a href="contact.html" class="btn btn-primary btn-sm px-4 py-2 w-100"><i class="fa fa-calendar-check me-2"></i>Book OPD Appointment</a>
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Dr. Jyoti Yadav - Gynecologist -->
+                <div class="col-lg-4 col-md-6 wow slideInUp" data-wow-delay="0.4s">
+                    <div class="team-item bg-light rounded overflow-hidden shadow-sm h-100 d-flex flex-column">
+                        <div class="position-relative" style="height: 340px; overflow: hidden;">
+                            <img class="w-100 h-100" src="nirmla/dr-jyoti.jpg" alt="Dr. Jyoti Yadav - Gynecologist in Rewari" style="object-fit: cover; object-position: top center;">
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-primary text-white px-3 py-2 rounded-pill shadow-sm"><i class="fa fa-clock me-1"></i> Daily OPD</span>
+                            </div>
+                        </div>
+                        <div class="team-text p-4 text-center flex-grow-1 d-flex flex-column justify-content-between">
+                            <div>
+                                <h4 class="mb-1">Dr. Jyoti Yadav</h4>
+                                <p class="text-primary fw-bold mb-1">Consultant Gynecologist & Obstetrician</p>
+                                <p class="text-muted small mb-2">MBBS, MS (Obs & Gynae) | FMAS (Minimal Access Surgery)</p>
+                                <p class="text-secondary small mb-3">Specialist in Normal & Painless Delivery, High-Risk Pregnancy, Infertility & Gynae Surgeries</p>
+                            </div>
+                            <div class="pt-3 border-top">
+                                <small class="text-dark d-block mb-3"><i class="fa fa-calendar-alt text-primary me-2"></i>Mon - Sat: 10:00 AM - 03:00 PM & 05:00 PM - 08:00 PM</small>
+                                <a href="contact.html" class="btn btn-primary btn-sm px-4 py-2 w-100"><i class="fa fa-calendar-check me-2"></i>Book OPD Appointment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orthopedic Surgeon -->
+                <div class="col-lg-4 col-md-6 wow slideInUp" data-wow-delay="0.6s">
+                    <div class="team-item bg-light rounded overflow-hidden shadow-sm h-100 d-flex flex-column">
+                        <div class="position-relative" style="height: 340px; overflow: hidden;">
+                            <img class="w-100 h-100" src="nirmla/dr-ortho.jpg" alt="Consultant Orthopedic Surgeon in Rewari" style="object-fit: cover; object-position: top center;">
+                            <div class="position-absolute top-0 start-0 m-3">
+                                <span class="badge bg-primary text-white px-3 py-2 rounded-pill shadow-sm"><i class="fa fa-clock me-1"></i> Daily OPD</span>
+                            </div>
+                        </div>
+                        <div class="team-text p-4 text-center flex-grow-1 d-flex flex-column justify-content-between">
+                            <div>
+                                <h4 class="mb-1">Orthopedic Surgeon</h4>
+                                <p class="text-primary fw-bold mb-1">Consultant Orthopedic & Joint Surgeon</p>
+                                <p class="text-muted small mb-2">MBBS, MS (Orthopaedics) | Trauma Specialist</p>
+                                <p class="text-secondary small mb-3">Specialist in Joint Replacement (Knee/Hip), Fracture & Trauma Surgery, Arthritis & Spine</p>
+                            </div>
+                            <div class="pt-3 border-top">
+                                <small class="text-dark d-block mb-3"><i class="fa fa-calendar-alt text-primary me-2"></i>Mon - Sun: Daily OPD & 24x7 Emergency Trauma Care</small>
+                                <a href="contact.html" class="btn btn-primary btn-sm px-4 py-2 w-100"><i class="fa fa-calendar-check me-2"></i>Book OPD Appointment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily OPD Banner info below doctors -->
+            <div class="bg-primary text-white rounded p-4 mt-5 wow fadeInUp text-center" data-wow-delay="0.3s">
+                <div class="row align-items-center">
+                    <div class="col-lg-8 text-lg-start mb-3 mb-lg-0">
+                        <h4 class="text-white mb-1"><i class="fa fa-stethoscope me-2"></i>Daily OPD Consultations Available</h4>
+                        <p class="mb-0 opacity-75">Walk-in OPD or advance telephone appointments available for Medicine, Gynecology, and Orthopedics. Cashless TPA insurance accepted.</p>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="tel:+919896907555" class="btn btn-light text-primary fw-bold py-2 px-4 me-2"><i class="fa fa-phone-alt me-1"></i> Call 98969 07555</a>
+                        <a href="contact.html" class="btn btn-outline-light py-2 px-4">Appointment</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

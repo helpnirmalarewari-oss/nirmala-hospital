@@ -98,9 +98,20 @@ const DEFAULT_CMS_DATA = {
             qualification: "MBBS, MD (Internal Medicine)",
             experience: "14+ Years Experience",
             opdTimings: "Mon - Sun: 09:00 AM - 02:00 PM & 05:00 PM - 09:00 PM",
-            status: "Available",
+            status: "Available (Daily OPD)",
             image: "nirmla/dr-ravi.jpg",
             bio: "Specialist in chronic disease management, advanced diabetes care, hypertension, and critical ICU medicine."
+        },
+        {
+            id: "doc-ortho",
+            name: "Consultant Orthopedic Surgeon",
+            specialty: "Orthopedics & Joint Care",
+            qualification: "MBBS, MS (Orthopaedics)",
+            experience: "10+ Years Experience",
+            opdTimings: "Mon - Sun: Daily OPD & 24x7 Emergency Trauma",
+            status: "Available (Daily OPD)",
+            image: "nirmla/dr-ortho.jpg",
+            bio: "Specialist in total knee & hip replacement, trauma surgery, fracture management, and spine care."
         }
     ],
     services: [
@@ -201,7 +212,7 @@ function isDummyDoctor(d) {
     if (!d) return true;
     const name = (d.name || '').toLowerCase();
     const id = (d.id || '').toLowerCase();
-    if (id === 'doc-3' || id === 'doc-surgeon' || name.includes('consultant') || name.includes('surgeon') || name.includes('dummy')) return true;
+    if (id === 'doc-dummy' || name.includes('dummy') || name.includes('test doctor')) return true;
     return false;
 }
 

@@ -102,7 +102,7 @@ Additional specialties are offered at the hospital (per service listings below),
 3. **Orthopedics & Joint Care** — total knee replacement, total hip replacement, wrist pain management
 4. **General Surgery**
 5. **Urology** — including Minimally Invasive Urology procedures
-6. **Dental / RCT (Root Canal Treatment)**
+6. **Critical Care & Trauma** (Note: *Dentist / Dental department is NOT offered at Nirmala Hospital*)
 7. **Physiotherapy** — Sports Physiotherapy, Neuro-Physiotherapy, Sports Injury Rehabilitation
 8. **Diagnostics / Pathology** — liver function, kidney function, lipid profile, and other routine lab checkups
 9. **Emergency & Critical Care** — 24x7 ICU with neonatal support
