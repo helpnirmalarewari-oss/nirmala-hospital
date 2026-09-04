@@ -332,7 +332,11 @@ function initFirestoreSync() {
                 }
             }
         }, err => {
-            console.warn("Firestore live snapshot notice:", err);
+            if (err && err.code === 'permission-denied') {
+                console.info("Firestore Live Sync: Awaiting Firestore Security Rules in Firebase Console. Using local cached data seamlessly.");
+            } else {
+                console.warn("Firestore live snapshot notice:", err);
+            }
         });
 
         // Listen to Appointments collection
@@ -349,7 +353,11 @@ function initFirestoreSync() {
                 if (typeof renderOverview === 'function') renderOverview();
             }
         }, err => {
-            console.warn("Firestore appointments snapshot notice:", err);
+            if (err && err.code === 'permission-denied') {
+                console.info("Firestore Appointments: Awaiting Firestore Security Rules in Firebase Console. Using local cached data seamlessly.");
+            } else {
+                console.warn("Firestore appointments snapshot notice:", err);
+            }
         });
     } catch (e) {
         console.warn("Firestore sync setup notice:", e);
